@@ -1,2 +1,2 @@
 
-protocol CommutativeRing: Ring { }
+protocol CommutativeRing: Ring, CommutativeSemiring { }
