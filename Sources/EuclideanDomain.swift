@@ -4,6 +4,7 @@ protocol EuclideanDomain: IntegralDomain {
     static func divideWithRemainder(_ x: Self, _ y: Self) -> (Self, remainder: Self)
     static func / (x: Self, y: Self) -> Self
     static func % (x: Self, y: Self) -> Self
+    static func greatestCommonDivisor(_ x: Self, _ y: Self) -> Self
 }
 
 extension EuclideanDomain {
@@ -13,6 +14,15 @@ extension EuclideanDomain {
     }
     static func % (x: Self, y: Self) -> Self {
         return Self.divideWithRemainder(x, y).remainder
+    }
+    // Euclidean algorithm
+    static func greatestCommonDivisor(_ x: Self, _ y: Self) -> Self {
+        precondition(x != Self.zero || y != Self.zero)
+        guard y != Self.zero else {
+            return x
+        }
+        let r = x % y
+        return r == Self.zero ? y : Self.greatestCommonDivisor(y, r)
     }
 }
 

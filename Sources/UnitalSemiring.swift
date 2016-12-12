@@ -12,6 +12,9 @@ extension UnitalSemiring {
             return power(x, n, {a, b in a * b})
         }
     }
+    static var nonzeroElement: Self {
+        return Self.unit
+    }
 }
 
 extension UInt: UnitalSemiring {

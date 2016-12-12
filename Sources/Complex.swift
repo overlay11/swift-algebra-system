@@ -1,5 +1,5 @@
 
-protocol ComplexEuclideanDomain: EuclideanDomain, CustomStringConvertible {
+protocol ComplexEuclideanDomain: EuclideanDomain, UnitalRing, CustomStringConvertible {
     associatedtype T
     var re: T { get }
     var im: T { get }
@@ -14,13 +14,13 @@ extension ComplexEuclideanDomain {
         return "i * \(im) + \(re)"
     }
     static func + (x: Self, y: T) -> Self {
-        return x + self.init(y)
+        return x + Self.init(y)
     }
     static func - (x: Self, y: T) -> Self {
-        return x - self.init(y)
+        return x - Self.init(y)
     }
     static func * (x: Self, y: T) -> Self {
-        return x * self.init(y)
+        return x * Self.init(y)
     }
 }
 
@@ -32,19 +32,21 @@ extension ComplexEuclideanDomain where T: UnitalRing & EuclideanDomain {
         return x.re == y.re && x.im == y.im
     }
     static func + (x: Self, y: Self) -> Self {
-        return self.init(x.re + y.re, x.im + y.im)
+        return Self.init(x.re + y.re, x.im + y.im)
     }
     static var zero: Self {
-        return self.init(T.zero, T.zero)
+        return Self.init(T.zero, T.zero)
     }
     static prefix func - (x: Self) -> Self {
-        return self.init(-x.re, -x.im)
+        return Self.init(-x.re, -x.im)
     }
     static func * (x: Self, y: Self) -> Self {
-        return self.init(x.re * y.re - x.im * y.im, x.im * y.re + x.re * y.im)
+        let re = x.re * y.re - x.im * y.im
+        let im = x.im * y.re + x.re * y.im
+        return Self.init(re, im)
     }
     static var unit: Self {
-        return self.init(T.unit, T.zero)
+        return Self.init(T.unit, T.zero)
     }
     var degree: Int {
         fatalError("Not Implemented")
@@ -53,7 +55,7 @@ extension ComplexEuclideanDomain where T: UnitalRing & EuclideanDomain {
         fatalError("Not Implemented")
     }
     static var imaginaryUnit: Self {
-        return self.init(T.zero, T.unit)
+        return Self.init(T.zero, T.unit)
     }
 }
 
@@ -77,10 +79,10 @@ extension ComplexField where T: Field {
         let r = y.re ** 2 + y.im ** 2
         let re = (x.re * y.re + x.im * y.im) / r
         let im = (x.im * y.re - x.re * y.im) / r
-        return self.init(re, im)
+        return Self.init(re, im)
     }
     static func / (x: Self, y: T) -> Self {
-        return x / self.init(y)
+        return x / Self.init(y)
     }
     static func divideWithRemainder(_ x: Self, _ y: Self) -> (Self, remainder: Self) {
         return (x / y, Self.zero)
