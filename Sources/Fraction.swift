@@ -31,25 +31,29 @@ extension FractionField where T: IntegralDomain {
     static func / (x: Self, y: Self) -> Self {
         return x * Self.init(y.denominator, y.numerator)
     }
-    var reduced: Self {
-        return numerator == denominator ? Self.unit : self
-    }
-}
-
-extension FractionField where T: EuclideanDomain {
-    var reduced: Self {
-        let d = T.greatestCommonDivisor(numerator, denominator)
-        return Self.init(numerator / d, denominator / d)
-    }
 }
 
 struct Fraction_Field<T: IntegralDomain>: FractionField, Field {
     var numerator: T
     var denominator: T
     init(_ numerator: T, _ denominator: T) {
-        self.numerator = numerator
-        self.denominator = denominator
+        if numerator == denominator {
+            self = Fraction_Field<T>.unit
+        } else {
+            self.numerator = numerator
+            self.denominator = denominator
+        }
     }
 }
 
-typealias Fraction<T: IntegralDomain> = Fraction_Field<T>
+struct ReducibleFraction_Field<T: EuclideanDomain>: FractionField, Field {
+    var numerator: T
+    var denominator: T
+    init(_ numerator: T, _ denominator: T) {
+        let gcd = T.greatestCommonDivisor(numerator, denominator)
+        self.numerator = numerator / gcd
+        self.denominator = denominator / gcd
+    }
+}
+
+typealias Fraction<T: EuclideanDomain> = ReducibleFraction_Field<T>
