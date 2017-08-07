@@ -14,6 +14,5 @@ extension Field {
 }
 
 extension Double: Field {
-    static var zero: Double { return 0.0 }
     static var unit: Double { return 1.0 }
 }

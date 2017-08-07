@@ -8,10 +8,6 @@ protocol EuclideanDomain: IntegralDomain {
 }
 
 extension EuclideanDomain {
-    static func / (x: Self, y: Self) -> Self {
-        let (quotient, _) = Self.divideWithRemainder(x, y)
-        return quotient
-    }
     static func % (x: Self, y: Self) -> Self {
         return Self.divideWithRemainder(x, y).remainder
     }
