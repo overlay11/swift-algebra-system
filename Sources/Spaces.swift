@@ -10,7 +10,11 @@ func * <T, U>(a: T, x: U) -> U where U: VectorSpace, T == U.T {
 }
 
 protocol MetricSpace {
-    static func metric(x: Self, y: Self) -> Double
+    static func metric(_ x: Self, _ y: Self) -> Double
+}
+
+func metric<T>(_ x: T, _ y: T) -> Double where T: MetricSpace {
+    return T.metric(x, y)
 }
 
 protocol NormedSpace: MetricSpace, AbelianGroup {
@@ -18,7 +22,7 @@ protocol NormedSpace: MetricSpace, AbelianGroup {
 }
 
 extension NormedSpace {
-    static func metric(x: Self, y: Self) -> Double {
+    static func metric(_ x: Self, _ y: Self) -> Double {
         return (x - y).norm
     }
 }
