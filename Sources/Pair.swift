@@ -53,6 +53,12 @@ extension Pair where T: UnitalRing {
     }
 }
 
+extension Pair where T: DivisionRing {
+    static func / (x: Self, a: T) -> Self {
+        return Self(x.re/a, x.im/a)
+    }
+}
+
 extension Pair where T: Field & InvolutiveRing {
     static func / (x: Self, y: Self) -> Self {
         let r = y.re ** 2 + y.im ** 2
@@ -61,7 +67,13 @@ extension Pair where T: Field & InvolutiveRing {
     }
 }
 
-struct PairOverTriviallyInvolutiveField<T: Field & TriviallyInvolutiveRing>: Pair, Field, InvolutiveRing, Extension {
+extension Pair where T: NormedSpace {
+    var norm: Double {
+        return (im.norm**2 + re.norm**2).squareRoot()
+    }
+}
+
+struct PairOverTriviallyInvolutiveField<T: Field & TriviallyInvolutiveRing & NormedSpace>: Pair, Field, InvolutiveRing, Extension, NormedVectorSpace {
     var re: T
     var im: T
     init(_ re: T, _ im: T) {
@@ -76,7 +88,7 @@ extension PairOverTriviallyInvolutiveField: CustomStringConvertible {
     }
 }
 
-struct PairOverInvolutiveField<T: Field & InvolutiveRing>: Pair, DivisionRing, InvolutiveRing, Extension {
+struct PairOverInvolutiveField<T: Field & InvolutiveRing & NormedSpace>: Pair, DivisionRing, InvolutiveRing, Extension, NormedVectorSpace {
     var re: T
     var im: T
     init(_ re: T, _ im: T) {
