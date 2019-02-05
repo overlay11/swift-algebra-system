@@ -1,2 +1,2 @@
 
-protocol IntegralDomain: CommutativeRing { }
+protocol IntegralDomain: CommutativeRing, UnitalRing { }

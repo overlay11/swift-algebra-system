@@ -10,7 +10,7 @@ protocol Fraction: CustomStringConvertible {
 
 extension Fraction {
     var description: String {
-        return "\(numerator) ÷ \(denominator)"
+        return "\(numerator) %% \(denominator)"
     }
 }
 
@@ -67,13 +67,13 @@ struct FractionOverEuclideanDomain<T: EuclideanDomain>: Fraction, Field, Extensi
     init(_ numerator: T, _ denominator: T) {
         precondition(denominator != T.zero)
         let gcd = T.greatestCommonDivisor(numerator, denominator)
-        self.numerator = numerator / gcd
-        self.denominator = denominator / gcd
+        self.numerator = numerator /% gcd
+        self.denominator = denominator /% gcd
     }
 }
 
-infix operator ÷: MultiplicationPrecedence
+infix operator %%: MultiplicationPrecedence
 
-func ÷ <T>(a: T, b: T) -> FractionOverEuclideanDomain<T> where T: EuclideanDomain {
+func %% <T>(a: T, b: T) -> FractionOverEuclideanDomain<T> where T: EuclideanDomain {
     return FractionOverEuclideanDomain(a, b)
 }

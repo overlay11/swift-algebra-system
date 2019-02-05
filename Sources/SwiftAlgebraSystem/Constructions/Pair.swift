@@ -51,6 +51,9 @@ extension Pair where T: UnitalRing {
     static var imaginaryUnit: Self {
         return Self(T.zero, T.unit)
     }
+    static var symbol: Self {
+        return Self.imaginaryUnit
+    }
 }
 
 extension Pair where T: DivisionRing {
@@ -69,7 +72,10 @@ extension Pair where T: Field & InvolutiveRing {
 
 extension Pair where T: NormedSpace {
     var norm: Double {
-        return (im.norm**2 + re.norm**2).squareRoot()
+        return (im.squaredNorm + re.squaredNorm).squareRoot()
+    }
+    var squaredNorm: Double {
+        return im.squaredNorm + re.squaredNorm
     }
 }
 

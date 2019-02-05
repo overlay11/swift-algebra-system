@@ -19,6 +19,7 @@ func metric<T>(_ x: T, _ y: T) -> Double where T: MetricSpace {
 
 protocol NormedSpace: MetricSpace, AbelianGroup {
     var norm: Double { get }
+    var squaredNorm: Double { get }
 }
 
 extension NormedSpace {
@@ -33,6 +34,7 @@ func norm<T>(_ x: T) -> Double where T: NormedSpace {
 
 extension Double: NormedSpace {
     var norm: Double { return abs(self) }
+    var squaredNorm: Double { return self**2 }
 }
 
 protocol NormedVectorSpace: VectorSpace, NormedSpace { }
@@ -44,5 +46,8 @@ protocol EuclideanSpace: NormedVectorSpace {
 extension EuclideanSpace {
     var norm: Double {
         return (self ** self).squareRoot()
+    }
+    var squareRoot: Double {
+        return self ** self
     }
 }
