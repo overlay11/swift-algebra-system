@@ -1,163 +1,152 @@
+struct Polynomial<Coefficient: Monoid> {
+    private var coefficients: [Coefficient]
 
-protocol PolynomialProtocol:
-    RandomAccessCollection,
-    ExpressibleByArrayLiteral
-{
-    typealias T = Element
-    var degree: Int { get }
-    subscript(i: Int) -> T { get }
-    init<U>(_ coefficients: U) where U: Sequence, U.Element == T
-    init(_ constant: T)
-    init()
-}
+    var degree: Int {
+        return coefficients.count - 1
+    }
 
-extension PolynomialProtocol {
-    var startIndex: Int {
-        return 0
+    init<T>(_ coefficients: T) where T: Sequence, T.Element == Coefficient {
+        self.coefficients = Array(coefficients)
+        while self.coefficients.last == Coefficient.zero {
+            self.coefficients.removeLast()
+        }
     }
-    var endIndex: Int {
-        return self.degree + 1
+
+    init(_ coefficients: Coefficient...) {
+        self.init(coefficients)
     }
-    init(arrayLiteral: T...) {
-        self.init(arrayLiteral)
-    }
-    init(_ constant: T) {
-        self.init([constant])
-    }
+
     init() {
-        self.init([])
+        coefficients = []
     }
-}
 
-extension PolynomialProtocol where Element: Equatable {
-    static func == (p: Self, q: Self) -> Bool {
-        guard p.degree == q.degree else {
-            return false
-        }
-        for (a, b) in zip(p, q) {
-            if a != b {
-                return false
-            }
-        }
-        return true
+    static func monomial(coefficient: Coefficient, degree: Int) -> Polynomial {
+        return Polynomial(Array(repeating: Coefficient.zero, count: degree) + [coefficient])
     }
-}
 
-extension PolynomialProtocol where Element: Semigroup {
-    static func + (p: Self, q: Self) -> Self {
-        let (n, m) = (p.degree, q.degree)
-        let u = zip(p, q).map(+)
-        let v = (n > m ? p : q).suffix(abs(n - m))
-        return Self(u + v)
-    }
-}
-
-extension PolynomialProtocol where Element: Monoid {
-    var description: String {
-        guard self.degree >= 0 else {
-            return "\(T.zero)"
-        }
-        return self
-            .enumerated()
-            .filter({ (_, coefficient) in coefficient != T.zero })
-            .reversed()
-            .map({ (i, coefficient) in
-                switch i {
-                case 0:
-                    return "\(coefficient)"
-                case 1:
-                    return "\(coefficient)*x"
-                default:
-                    return "\(coefficient)*x**\(i)"
-                }
-            })
-            .joined(separator: " + ")
-    }
-    static func monomial(coefficient: T, degree: Int) -> Self {
-        return Self(Array(repeating: T.zero, count: degree) + [coefficient])
-    }
-    func derivative() -> Self {
-        return Self(
-            self.enumerated().dropFirst().map({ (i, a) in a*i })
+    func derivative() -> Polynomial {
+        return Polynomial(
+            self.enumerated().dropFirst().map { $0.1 * $0.0 }
         )
     }
 }
 
-extension PolynomialProtocol where Element: Group {
-    static prefix func - (p: Self) -> Self {
-        return Self(p.map(-))
+extension Polynomial: CustomStringConvertible {
+    var description: String {
+        guard degree >= 0 else {
+            return "Polynomial(\(Coefficient.zero))"
+        }
+        return "Polynomial(" + self.map { "\($0)" }.joined(separator: ", ") + ")"
     }
 }
 
-extension PolynomialProtocol where Element: Ring {
-    static func * (p: Self, q: Self) -> Self {
+extension Polynomial: RandomAccessCollection {
+    var startIndex: Int {
+        return 0
+    }
+    var endIndex: Int {
+        return degree + 1
+    }
+    subscript(i: Int) -> Coefficient {
+        return coefficients[i]
+    }
+}
+
+extension Polynomial: ExpressibleByArrayLiteral {
+    init(arrayLiteral: Coefficient...) {
+        self.init(arrayLiteral)
+    }
+}
+
+extension Polynomial: Equatable {
+    static func == (p: Polynomial, q: Polynomial) -> Bool {
+        return p.coefficients == q.coefficients
+    }
+}
+
+extension Polynomial: Semigroup {
+    static func + (p: Polynomial, q: Polynomial) -> Polynomial {
+        let (n, m) = (p.degree, q.degree)
+        let u = zip(p, q).map(+)
+        let v = (n > m ? p : q).suffix(abs(n - m))
+        return Polynomial(u + v)
+    }
+}
+
+extension Polynomial: Monoid {
+    static var nonzeroElement: Polynomial {
+        return Polynomial(Coefficient.nonzeroElement)
+    }
+}
+
+extension Polynomial: Group where Coefficient: Group {
+    static prefix func - (p: Polynomial) -> Polynomial {
+        return Polynomial(p.map(-))
+    }
+}
+
+extension Polynomial: CommutativeSemigroup, CommutativeMonoid where Coefficient: CommutativeMonoid {}
+
+extension Polynomial: AbelianGroup where Coefficient: AbelianGroup {}
+
+extension Polynomial: Semiring where Coefficient: Semiring {
+    static func * (p: Polynomial, q: Polynomial) -> Polynomial {
         let (n, m) = (p.degree, q.degree)
         guard n >= 0 && m >= 0 else {
-            return Self()
+            return Polynomial()
         }
-        let r = (0 ... n + m).map({ i in
-            (0...i).map({ j in
+        let r = (0 ... n+m).map { i in
+            (0...i).map { j in
                 let k = i - j
                 guard j <= n && k <= m else {
-                    return T.zero
+                    return Coefficient.zero
                 }
                 return p[j] * q[k]
-            }).reduce(T.zero, +)
-        })
-        return Self(r)
-    }
-}
-
-extension PolynomialProtocol where Element: CommutativeRing {
-    func value(x: T) -> T {
-        guard self.degree >= 0 else {
-            return T.zero
+            }.reduce(Coefficient.zero, +)
         }
-        return self[0] + x * Self(self.dropFirst()).value(x: x)
+        return Polynomial(r)
     }
 }
 
-extension PolynomialProtocol where Element: UnitalRing {
-    static var unit: Self {
-        return Self(T.unit)
+extension Polynomial: Ring where Coefficient: Ring {}
+
+extension Polynomial: UnitalSemiring where Coefficient: UnitalSemiring {
+    static var unit: Polynomial {
+        return Polynomial(Coefficient.unit)
     }
-    static var symbol: Self {
-        return Self([T.zero, T.unit])
+    static var symbol: Polynomial {
+        return Polynomial(Coefficient.zero, Coefficient.unit)
     }
 }
 
-extension PolynomialProtocol where Element: Field {
-    static func divideWithRemainder(_ p: Self, _ q: Self) -> (Self, remainder: Self) {
+extension Polynomial: CommutativeSemiring where Coefficient: CommutativeSemiring {
+    func value(x: Coefficient) -> Coefficient {
+        guard degree >= 0 else {
+            return Coefficient.zero
+        }
+        return self[0] + x * Polynomial(self.dropFirst()).value(x: x)
+    }
+}
+
+extension Polynomial: UnitalRing where Coefficient: UnitalRing {}
+
+extension Polynomial: CommutativeRing where Coefficient: CommutativeRing {}
+
+extension Polynomial: IntegralDomain where Coefficient: IntegralDomain {}
+
+extension Polynomial: EuclideanDomain where Coefficient: Field {
+    static func divideWithRemainder(_ p: Polynomial, _ q: Polynomial) -> (Polynomial, remainder: Polynomial) {
         let (n, m) = (p.degree, q.degree)
         precondition(m >= 0)
         guard n >= m else {
-            return (Self(), p)
+            return (Polynomial.zero, p)
         }
-        let r = Self.monomial(coefficient: p[n]/q[m], degree: n - m)
-        let (u, v) = Self.divideWithRemainder(p + -r * q, q)
+        let r = Polynomial.monomial(coefficient: p[n]/q[m], degree: n - m)
+        let (u, v) = Polynomial.divideWithRemainder(p - r * q, q)
         return (r + u, v)
      }
-}
 
-struct PolynomialOverField<T: Field>:
-    PolynomialProtocol,
-    CustomStringConvertible,
-    EuclideanDomain,
-    Extension
-{
-    var coefficients: [T]
-    var degree: Int {
-        return self.coefficients.count - 1
-    }
-    subscript(i: Int) -> T {
-        return self.coefficients[i]
-    }
-    init<U>(_ coefficients: U) where U: Sequence, U.Element == T {
-        self.coefficients = Array(coefficients)
-        while self.coefficients.last == T.zero {
-            self.coefficients.removeLast()
-        }
-    }
+     func monic() -> Polynomial {
+         return Polynomial(self.map { $0/self[degree] })
+     }
 }
-
-typealias Polynomial = PolynomialOverField

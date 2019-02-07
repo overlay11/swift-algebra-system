@@ -1,76 +1,87 @@
+struct Pair<T: Monoid> {
+    private let re: T
+    private let im: T
 
-protocol Pair {
-    associatedtype T
-    var re: T { get }
-    var im: T { get }
-    init(_ re: T, _ im: T)
-    init(_ re: T)
-    init()
+    init(_ re: T, _ im: T = T.zero) {
+        self.re = re
+        self.im = im
+    }
+
+    init() {
+        self.init(T.zero)
+    }
 }
 
-extension Pair where T: Equatable {
-    static func == (x: Self, y: Self) -> Bool {
+extension Pair: CustomStringConvertible {
+    var description: String {
+        return "Pair(\(re), \(im))"
+    }
+}
+
+extension Pair: Equatable {
+    static func == (x: Pair, y: Pair) -> Bool {
         return x.re == y.re && x.im == y.im
     }
 }
 
-extension Pair where T: Semigroup {
-    static func + (x: Self, y: Self) -> Self {
-        return Self(x.re + y.re, x.im + y.im)
+extension Pair: Semigroup {
+    static func + (x: Pair, y: Pair) -> Pair {
+        return Pair(x.re + y.re, x.im + y.im)
     }
 }
 
-extension Pair where T: Monoid {
-    init(_ re: T) {
-        self.init(re, T.zero)
-    }
-    init() {
-        self.init(T.zero, T.zero)
+extension Pair: Monoid {
+    static var nonzeroElement: Pair {
+        return Pair(T.nonzeroElement)
     }
 }
 
-extension Pair where T: Group {
-    static prefix func - (x: Self) -> Self {
-        return Self(-x.re, -x.im)
+extension Pair: CommutativeSemigroup, CommutativeMonoid where T: CommutativeMonoid {}
+
+extension Pair: Group where T: Group {
+    static prefix func - (x: Pair) -> Pair {
+        return Pair(-x.re, -x.im)
     }
 }
 
-extension Pair where T: InvolutiveRing {
-    static postfix func * (x: Self) -> Self {
-        return Self(x.re*, -x.im)
+extension Pair: AbelianGroup where T: AbelianGroup {}
+
+extension Pair: Semiring, Ring, InvolutiveRing where T: InvolutiveRing {
+    static postfix func * (x: Pair) -> Pair {
+        return Pair(x.re*, -x.im)
     }
-    static func * (x: Self, y: Self) -> Self {
-        return Self(x.re * y.re - y.im* * x.im, y.im * x.re + x.im * y.re*)
+    static func * (x: Pair, y: Pair) -> Pair {
+        return Pair(x.re * y.re - y.im* * x.im, y.im * x.re + x.im * y.re*)
     }
 }
 
-extension Pair where T: UnitalRing {
-    static var unit: Self {
-        return Self(T.unit)
+extension Pair: UnitalSemiring, UnitalRing where T: UnitalRing & InvolutiveRing {
+    static var unit: Pair {
+        return Pair(T.unit)
     }
-    static var imaginaryUnit: Self {
-        return Self(T.zero, T.unit)
+    static var imaginaryUnit: Pair {
+        return Pair(T.zero, T.unit)
     }
-    static var symbol: Self {
-        return Self.imaginaryUnit
+    static var symbol: Pair {
+        return Pair.imaginaryUnit
     }
 }
 
 extension Pair where T: DivisionRing {
-    static func / (x: Self, a: T) -> Self {
-        return Self(x.re/a, x.im/a)
+    static func / (x: Pair, a: T) -> Pair {
+        return Pair(x.re/a, x.im/a)
     }
 }
 
-extension Pair where T: Field & InvolutiveRing {
-    static func / (x: Self, y: Self) -> Self {
+extension Pair: DivisionRing where T: DivisionRing & InvolutiveRing {
+    static func / (x: Pair, y: Pair) -> Pair {
         let r = y.re ** 2 + y.im ** 2
         let p = x * y*
-        return Self(p.re/r, p.im/r)
+        return Pair(p.re/r, p.im/r)
     }
 }
 
-extension Pair where T: NormedSpace {
+extension Pair: MetricSpace, NormedSpace where T: NormedSpace {
     var norm: Double {
         return (im.squaredNorm + re.squaredNorm).squareRoot()
     }
@@ -79,35 +90,17 @@ extension Pair where T: NormedSpace {
     }
 }
 
-struct PairOverTriviallyInvolutiveField<T: Field & TriviallyInvolutiveRing & NormedSpace>: Pair, Field, InvolutiveRing, Extension, NormedVectorSpace {
-    var re: T
-    var im: T
-    init(_ re: T, _ im: T) {
-        self.re = re
-        self.im = im
+extension Pair: CommutativeSemiring, CommutativeRing where T: TriviallyInvolutiveRing {}
+
+// extension Pair: EuclideanDomain where T: EuclideanDomain, InvolutiveRing {}
+
+extension Pair: IntegralDomain, EuclideanDomain, Field where T: Field & TriviallyInvolutiveRing {}
+
+typealias Complex = Pair<Double>
+typealias Quaternion = Pair<Complex>
+
+extension Pair where T == Complex {
+    init(_ a: Double, _ b: Double = 0, _ c: Double = 0, _ d: Double = 0) {
+        self.init(Complex(a, b), Complex(c, d))
     }
 }
-
-extension PairOverTriviallyInvolutiveField: CustomStringConvertible {
-    var description: String {
-        return "\(re) + \(im) * i"
-    }
-}
-
-struct PairOverInvolutiveField<T: Field & InvolutiveRing & NormedSpace>: Pair, DivisionRing, InvolutiveRing, Extension, NormedVectorSpace {
-    var re: T
-    var im: T
-    init(_ re: T, _ im: T) {
-        self.re = re
-        self.im = im
-    }
-}
-
-extension PairOverInvolutiveField: CustomStringConvertible {
-    var description: String {
-        return "(\(re)) + (\(im)) * j"
-    }
-}
-
-typealias Complex = PairOverTriviallyInvolutiveField<Double>
-typealias Quaternion = PairOverInvolutiveField<Complex>
