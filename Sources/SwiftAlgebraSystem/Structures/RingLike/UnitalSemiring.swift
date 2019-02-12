@@ -1,4 +1,3 @@
-
 protocol UnitalSemiring: Semiring {
     static var unit: Self { get }
 }
@@ -9,7 +8,7 @@ extension UnitalSemiring {
         if n == 0 {
             return Self.unit
         } else {
-            return power(x, n, {a, b in a * b})
+            return power(x, n, *)
         }
     }
     static var nonzeroElement: Self {

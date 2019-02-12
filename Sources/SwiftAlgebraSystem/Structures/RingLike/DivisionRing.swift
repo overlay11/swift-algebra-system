@@ -1,4 +1,3 @@
-
 protocol DivisionRing: UnitalRing {
     static func / (x: Self, y: Self) -> Self
     var inversed: Self { get }
@@ -12,7 +11,7 @@ extension DivisionRing {
         case 0:
             return Self.unit
         default:
-            return power(x, n, {a, b in a * b})
+            return power(x, n, *)
         }
     }
     var inversed: Self {

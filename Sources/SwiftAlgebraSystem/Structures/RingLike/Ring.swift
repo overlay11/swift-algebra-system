@@ -1,2 +1,1 @@
-
-protocol Ring: AbelianGroup, Semiring { }
+protocol Ring: AbelianGroup, Semiring {}

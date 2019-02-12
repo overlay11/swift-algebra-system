@@ -1,4 +1,3 @@
-
 protocol Extension: Ring {
     associatedtype T
     init(_ a: T)

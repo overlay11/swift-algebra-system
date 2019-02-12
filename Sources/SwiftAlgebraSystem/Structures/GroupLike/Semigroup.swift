@@ -1,4 +1,3 @@
-
 protocol Semigroup: Equatable {
     static func + (x: Self, y: Self) -> Self
     static func * (x: Self, y: Int) -> Self
@@ -7,6 +6,6 @@ protocol Semigroup: Equatable {
 extension Semigroup {
     static func * (x: Self, n: Int) -> Self {
         precondition(n > 0)
-        return power(x, n, {a, b in a + b})
+        return power(x, n, +)
     }
 }

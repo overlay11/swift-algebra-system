@@ -1,4 +1,3 @@
-
 protocol Group: Monoid {
     static func - (x: Self, y: Self) -> Self
     static prefix func - (x: Self) -> Self
@@ -15,7 +14,7 @@ extension Group {
         case 0:
             return Self.zero
         default:
-            return power(x, n, {a, b in a + b})
+            return power(x, n, +)
         }
     }
 }

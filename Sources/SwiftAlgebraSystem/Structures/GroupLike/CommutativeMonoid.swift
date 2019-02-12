@@ -1,2 +1,1 @@
-
-protocol CommutativeMonoid: Monoid, CommutativeSemigroup { }
+protocol CommutativeMonoid: Monoid, CommutativeSemigroup {}

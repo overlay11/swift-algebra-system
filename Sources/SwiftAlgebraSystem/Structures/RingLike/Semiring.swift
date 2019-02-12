@@ -1,4 +1,3 @@
-
 precedencegroup ExponentiationPrecedence {
     higherThan: MultiplicationPrecedence
     associativity: right
@@ -14,6 +13,6 @@ protocol Semiring: CommutativeMonoid {
 extension Semiring {
     static func ** (x: Self, n: Int) -> Self {
         precondition(n > 0)
-        return power(x, n, {a, b in a * b})
+        return power(x, n, *)
     }
 }

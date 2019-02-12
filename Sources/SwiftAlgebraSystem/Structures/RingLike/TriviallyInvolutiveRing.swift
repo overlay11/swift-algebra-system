@@ -1,5 +1,4 @@
-
-protocol TriviallyInvolutiveRing: InvolutiveRing { }
+protocol TriviallyInvolutiveRing: InvolutiveRing {}
 
 extension TriviallyInvolutiveRing {
     static postfix func * (x: Self) -> Self {
@@ -7,4 +6,4 @@ extension TriviallyInvolutiveRing {
     }
 }
 
-extension Double: TriviallyInvolutiveRing { }
+extension Double: TriviallyInvolutiveRing {}

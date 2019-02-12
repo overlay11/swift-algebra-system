@@ -1,2 +1,1 @@
-
-protocol CommutativeSemigroup: Semigroup { }
+protocol CommutativeSemigroup: Semigroup {}

@@ -1,2 +1,1 @@
-
-protocol AbelianGroup: Group, CommutativeMonoid { }
+protocol AbelianGroup: Group, CommutativeMonoid {}

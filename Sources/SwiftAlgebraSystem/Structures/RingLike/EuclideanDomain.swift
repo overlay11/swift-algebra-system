@@ -1,4 +1,3 @@
-
 infix operator /%: MultiplicationPrecedence
 
 protocol EuclideanDomain: IntegralDomain {

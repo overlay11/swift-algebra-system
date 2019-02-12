@@ -1,5 +1,4 @@
-
-protocol Field: DivisionRing, EuclideanDomain { }
+protocol Field: DivisionRing, EuclideanDomain {}
 
 extension Field {
     var degree: Int {

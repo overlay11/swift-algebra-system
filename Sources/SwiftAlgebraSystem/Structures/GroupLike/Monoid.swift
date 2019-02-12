@@ -1,4 +1,3 @@
-
 protocol Monoid: Semigroup {
     static var zero: Self { get }
     static var nonzeroElement: Self { get }
@@ -8,7 +7,7 @@ protocol Monoid: Semigroup {
 extension Monoid {
     static func * (x: Self, n: Int) -> Self {
         precondition(n >= 0)
-        return n == 0 ? Self.zero : power(x, n, {a, b in a + b})
+        return n == 0 ? Self.zero : power(x, n, +)
     }
     static var zero: Self {
         return Self()

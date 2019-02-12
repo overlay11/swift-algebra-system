@@ -1,4 +1,3 @@
-
 postfix operator *
 
 protocol InvolutiveRing: Ring {

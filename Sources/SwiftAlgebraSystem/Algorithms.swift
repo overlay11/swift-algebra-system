@@ -1,4 +1,3 @@
-
 // Exponentiation by squaring
 func power<T>(_ x: T, _ n: Int, _ f: (T, T) -> T) -> T {
     precondition(n > 0)

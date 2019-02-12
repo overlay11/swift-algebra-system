@@ -1,4 +1,3 @@
-
 protocol VectorSpace: AbelianGroup {
     associatedtype T: Field
     static func * (x: Self, a: T) -> Self
@@ -37,7 +36,7 @@ extension Double: NormedSpace {
     var squaredNorm: Double { return self**2 }
 }
 
-protocol NormedVectorSpace: VectorSpace, NormedSpace { }
+protocol NormedVectorSpace: VectorSpace, NormedSpace {}
 
 protocol EuclideanSpace: NormedVectorSpace {
     static func ** (x: Self, y: Self) -> Double

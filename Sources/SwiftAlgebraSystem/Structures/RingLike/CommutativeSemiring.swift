@@ -1,4 +1,3 @@
+protocol CommutativeSemiring: Semiring {}
 
-protocol CommutativeSemiring: Semiring { }
-
-extension UInt: CommutativeSemiring { }
+extension UInt: CommutativeSemiring {}
