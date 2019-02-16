@@ -2,7 +2,7 @@
 
 import XCTest
 
-class FractionsTests: XCTestCase {
+class FractionTests: XCTestCase {
     func testDescription() {
         XCTAssert(String(describing: Fraction<Int>()) == "Fraction(0, 1)")
         XCTAssert(String(describing: Fraction(4)) == "Fraction(4, 1)")

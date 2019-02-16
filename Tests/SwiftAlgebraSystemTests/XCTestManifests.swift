@@ -1,6 +1,6 @@
 import XCTest
 
-extension FractionsTests {
+extension FractionTests {
     static let __allTests = [
         ("testAddition", testAddition),
         ("testDescription", testDescription),
@@ -36,7 +36,7 @@ extension PolynomialTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(FractionsTests.__allTests),
+        testCase(FractionTests.__allTests),
         testCase(PairTests.__allTests),
         testCase(PolynomialTests.__allTests),
     ]
