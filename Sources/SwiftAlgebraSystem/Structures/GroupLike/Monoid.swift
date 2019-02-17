@@ -1,6 +1,5 @@
 protocol Monoid: Semigroup {
     static var zero: Self { get }
-    static var nonzeroElement: Self { get }
     init()
 }
 

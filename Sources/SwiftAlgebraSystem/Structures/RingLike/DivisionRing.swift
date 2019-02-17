@@ -1,4 +1,4 @@
-protocol DivisionRing: UnitalRing {
+protocol DivisionRing: Ring, Unital {
     static func / (x: Self, y: Self) -> Self
     var inversed: Self { get }
 }

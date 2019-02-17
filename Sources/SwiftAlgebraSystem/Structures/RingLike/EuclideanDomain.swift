@@ -1,7 +1,6 @@
 infix operator /%: MultiplicationPrecedence
 
 protocol EuclideanDomain: IntegralDomain {
-    var degree: Int { get }
     static func divideWithRemainder(_ x: Self, _ y: Self) -> (Self, remainder: Self)
     static func /% (x: Self, y: Self) -> Self
     static func % (x: Self, y: Self) -> Self
@@ -28,7 +27,7 @@ extension EuclideanDomain {
 }
 
 extension Int: EuclideanDomain {
-    var degree: Int { return abs(self) }
+    static let unit = 1
     static func /% (x: Int, y: Int) -> Int {
         return x / y
     }

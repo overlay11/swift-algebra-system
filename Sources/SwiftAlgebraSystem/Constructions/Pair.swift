@@ -30,11 +30,7 @@ extension Pair: Semigroup {
     }
 }
 
-extension Pair: Monoid {
-    static var nonzeroElement: Pair {
-        return Pair(T.nonzeroElement)
-    }
-}
+extension Pair: Monoid {}
 
 extension Pair: CommutativeSemigroup, CommutativeMonoid where T: CommutativeMonoid {}
 
@@ -55,7 +51,7 @@ extension Pair: Semiring, Ring, InvolutiveRing where T: InvolutiveRing {
     }
 }
 
-extension Pair: UnitalSemiring, UnitalRing where T: UnitalRing & InvolutiveRing {
+extension Pair: Unital where T: InvolutiveRing & Unital {
     static var unit: Pair {
         return Pair(T.unit)
     }
@@ -90,7 +86,7 @@ extension Pair: MetricSpace, NormedSpace where T: NormedSpace {
     }
 }
 
-extension Pair: CommutativeSemiring, CommutativeRing where T: TriviallyInvolutiveRing {}
+extension Pair: Commutative where T: TriviallyInvolutiveRing {}
 
 // extension Pair: EuclideanDomain where T: EuclideanDomain, InvolutiveRing {}
 

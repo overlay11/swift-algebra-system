@@ -73,11 +73,7 @@ extension Polynomial: Semigroup {
     }
 }
 
-extension Polynomial: Monoid {
-    static var nonzeroElement: Polynomial {
-        return Polynomial(Coefficient.nonzeroElement)
-    }
-}
+extension Polynomial: Monoid {}
 
 extension Polynomial: Group where Coefficient: Group {
     static prefix func - (p: Polynomial) -> Polynomial {
@@ -110,7 +106,7 @@ extension Polynomial: Semiring where Coefficient: Semiring {
 
 extension Polynomial: Ring where Coefficient: Ring {}
 
-extension Polynomial: UnitalSemiring where Coefficient: UnitalSemiring {
+extension Polynomial: Unital where Coefficient: Unital {
     static var unit: Polynomial {
         return Polynomial(Coefficient.unit)
     }
@@ -119,7 +115,7 @@ extension Polynomial: UnitalSemiring where Coefficient: UnitalSemiring {
     }
 }
 
-extension Polynomial: CommutativeSemiring where Coefficient: CommutativeSemiring {
+extension Polynomial: Commutative where Coefficient: Commutative {
     func value(x: Coefficient) -> Coefficient {
         guard degree >= 0 else {
             return Coefficient.zero
@@ -127,10 +123,6 @@ extension Polynomial: CommutativeSemiring where Coefficient: CommutativeSemiring
         return self[0] + x * Polynomial(self.dropFirst()).value(x: x)
     }
 }
-
-extension Polynomial: UnitalRing where Coefficient: UnitalRing {}
-
-extension Polynomial: CommutativeRing where Coefficient: CommutativeRing {}
 
 extension Polynomial: IntegralDomain where Coefficient: IntegralDomain {}
 

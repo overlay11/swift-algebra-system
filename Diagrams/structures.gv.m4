@@ -13,7 +13,6 @@ DIAGRAM
 
         PROTOCOL(Monoid)
             STATIC ATTRIBUTE(zero: Self)
-            ABSTRACT STATIC ATTRIBUTE(nonzeroElement: Self)
             ABSTRACT OPERATION(init())
         END
 
@@ -41,12 +40,11 @@ DIAGRAM
             STATIC OPERATION(**(Self, Int), Self)
         END
 
-        PROTOCOL(UnitalSemiring)
+        PROTOCOL(Unital(Semiring))
             ABSTRACT STATIC ATTRIBUTE(unit: Self)
-            STATIC ATTRIBUTE(nonzeroElement: Self)
         END
 
-        PROTOCOL(CommutativeSemiring)
+        PROTOCOL(Commutative(Semiring))
         END
 
         PROTOCOL(Ring)
@@ -60,12 +58,6 @@ DIAGRAM
             STATIC OPERATION(postfix *(Self), Self)
         END
 
-        PROTOCOL(UnitalRing)
-        END
-
-        PROTOCOL(CommutativeRing)
-        END
-
         PROTOCOL(IntegralDomain)
         END
 
@@ -75,7 +67,6 @@ DIAGRAM
         END
 
         PROTOCOL(EuclideanDomain)
-            ABSTRACT ATTRIBUTE(degree: Int)
             ABSTRACT STATIC OPERATION(divideWithRemainder(Self, Self), (Self, Self))
             STATIC OPERATION(%(Self, Self), Self)
             STATIC OPERATION(/%(Self, Self), Self)
@@ -83,18 +74,15 @@ DIAGRAM
         END
 
         PROTOCOL(Field)
-            ATTRIBUTE(degree: Int)
             STATIC OPERATION(divideWithRemainder(Self, Self), (Self, Self))
         END
 
         GENERALIZATIONS
-            { UnitalSemiring CommutativeSemiring Ring } -> Semiring
-            { UnitalRing CommutativeRing InvolutiveRing } -> Ring
+            { "Unital(Semiring)" "Commutative(Semiring)" Ring } -> Semiring
+            InvolutiveRing -> Ring
             TriviallyInvolutiveRing -> InvolutiveRing
-            UnitalRing -> UnitalSemiring
-            CommutativeRing -> CommutativeSemiring
-            Field -> DivisionRing -> UnitalRing
-            Field -> EuclideanDomain -> IntegralDomain -> { CommutativeRing UnitalRing }
+            Field -> DivisionRing -> { Ring "Unital(Semiring)" }
+            Field -> EuclideanDomain -> IntegralDomain -> { Ring "Commutative(Semiring)" "Unital(Semiring)" }
         END
     END
 

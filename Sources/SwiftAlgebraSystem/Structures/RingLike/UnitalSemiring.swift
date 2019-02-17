@@ -11,12 +11,12 @@ extension UnitalSemiring {
             return power(x, n, *)
         }
     }
-    static var nonzeroElement: Self {
-        return Self.unit
-    }
 }
 
 extension UInt: UnitalSemiring {
-    static var zero: UInt { return 0 }
-    static var unit: UInt { return 1 }
+    static let zero: UInt = 0
+    static let unit: UInt = 1
 }
+
+typealias Unital = UnitalSemiring
+typealias UnitalRing = Ring & Unital

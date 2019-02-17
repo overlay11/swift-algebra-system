@@ -1,9 +1,6 @@
 protocol Field: DivisionRing, EuclideanDomain {}
 
 extension Field {
-    var degree: Int {
-        return self == Self.zero ? 0 : 1
-    }
     static func /% (x: Self, y: Self) -> Self {
         return x / y
     }
