@@ -1,4 +1,7 @@
 DIAGRAM
+    PROTOCOLS(Monoid, Group, CommutativeMonoid, AbelianGroup, Semiring, Ring,
+              Unital, IntegralDomain, EuclideanDomain, Commutative)
+
     GENERALIZATIONS
         "Polynomial<Coefficient: AbelianGroup>" -> {
             "Polynomial<Coefficient: Group>"
@@ -10,21 +13,16 @@ DIAGRAM
             "Polynomial<Coefficient: Semiring>"
         }
         {
-            "Polynomial<Coefficient: UnitalSemiring>"
-            "Polynomial<Coefficient: CommutativeSemiring>"
+            "Polynomial<Coefficient: Unital>"
+            "Polynomial<Coefficient: Commutative>"
         } -> "Polynomial<Coefficient: Semiring>"
-        "Polynomial<Coefficient: UnitalRing>" -> {
-            "Polynomial<Coefficient: UnitalSemiring>"
+        "Polynomial<Coefficient: IntegralDomain>" ->  {
             "Polynomial<Coefficient: Ring>"
+            "Polynomial<Coefficient: Unital>"
         }
-        "Polynomial<Coefficient: CommutativeRing>" -> {
-            "Polynomial<Coefficient: Ring>"
-            "Polynomial<Coefficient: CommutativeSemiring>"
-        }
-        "Polynomial<Coefficient: IntegralDomain>" -> "Polynomial<Coefficient: UnitalRing>"
         "Polynomial<Coefficient: Field>" -> {
             "Polynomial<Coefficient: IntegralDomain>"
-            "Polynomial<Coefficient: CommutativeRing>"
+            "Polynomial<Coefficient: Commutative>"
         }
     END
 
@@ -35,10 +33,8 @@ DIAGRAM
         HORIZONTAL RELATION("Polynomial<Coefficient: AbelianGroup>" -> AbelianGroup)
         HORIZONTAL RELATION("Polynomial<Coefficient: Semiring>" -> Semiring)
         HORIZONTAL RELATION("Polynomial<Coefficient: Ring>" -> Ring)
-        HORIZONTAL RELATION("Polynomial<Coefficient: UnitalSemiring>" -> UnitalSemiring)
-        HORIZONTAL RELATION("Polynomial<Coefficient: CommutativeSemiring>" -> CommutativeSemiring)
-        HORIZONTAL RELATION("Polynomial<Coefficient: UnitalRing>" -> UnitalRing)
-        HORIZONTAL RELATION("Polynomial<Coefficient: CommutativeRing>" -> CommutativeRing)
+        HORIZONTAL RELATION("Polynomial<Coefficient: Unital>" -> Unital)
+        HORIZONTAL RELATION("Polynomial<Coefficient: Commutative>" -> Commutative)
         HORIZONTAL RELATION("Polynomial<Coefficient: IntegralDomain>" -> IntegralDomain)
         HORIZONTAL RELATION("Polynomial<Coefficient: Field>" -> EuclideanDomain)
     END

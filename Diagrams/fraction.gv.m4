@@ -1,9 +1,5 @@
 DIAGRAM
-    TYPE(Fraction<T: IntegralDomain>, struct)
-    END
-
-    PROTOCOL(Field)
-    END
+    PROTOCOLS(Field)
 
     IMPLEMENTATIONS
         HORIZONTAL RELATION("Fraction<T: IntegralDomain>" -> Field)
