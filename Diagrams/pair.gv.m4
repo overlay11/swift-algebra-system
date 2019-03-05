@@ -2,15 +2,42 @@ DIAGRAM
     PROTOCOLS(Monoid, CommutativeMonoid, Group, AbelianGroup, InvolutiveRing,
               Unital, DivisionRing, Commutative, Field, NormedSpace)
 
+    TYPE(Pair<T: Monoid>)
+        ATTRIBUTE(re: T)
+        ATTRIBUTE(im: T)
+        OPERATION(init(T, T))
+    END
+
+    TYPE(Pair<T: InvolutiveRing & Unital>)
+        STATIC ATTRIBUTE(symbol: Pair)
+    END
+
+    TYPE(Pair<T: DivisionRing & InvolutiveRing>)
+        STATIC OPERATION(/(Pair, T), Pair)
+    END
+
+    TYPE(Pair<Complex>)
+        OPERATION(init(Double, Double, Double, Double))
+    END
+
     GENERALIZATIONS
         "Pair<T: AbelianGroup>" -> { "Pair<T: Group>" "Pair<T: CommutativeMonoid>" } -> "Pair<T: Monoid>"
         "Pair<T: TriviallyInvolutiveRing>" -> "Pair<T: InvolutiveRing>" -> "Pair<T: AbelianGroup>"
         "Pair<T: NormedSpace>" -> "Pair<T: AbelianGroup>"
-        Quaternion -> "Pair<T: DivisionRing & InvolutiveRing>" -> "Pair<T: InvolutiveRing & Unital>" -> "Pair<T: InvolutiveRing>"
-        Complex -> "Pair<T: Field & TriviallyInvolutiveRing>" -> {
+        "Pair<Complex>" -> "Pair<T: DivisionRing & InvolutiveRing>" -> "Pair<T: InvolutiveRing & Unital>" -> "Pair<T: InvolutiveRing>"
+        "Pair<Double>" -> "Pair<T: Field & TriviallyInvolutiveRing>" -> {
             "Pair<T: TriviallyInvolutiveRing>"
             "Pair<T: DivisionRing & InvolutiveRing>"
         }
+    END
+
+    BIDIRECTIONAL GENERALIZATIONS
+        HORIZONTAL RELATION(Complex -> "Pair<Double>")
+        HORIZONTAL RELATION(Quaternion -> "Pair<Complex>")
+    END
+
+    DEPENDENCIES
+        "Pair<Complex>" -> Complex
     END
 
     IMPLEMENTATIONS

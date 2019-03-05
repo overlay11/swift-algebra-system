@@ -2,6 +2,22 @@ DIAGRAM
     PROTOCOLS(Monoid, Group, CommutativeMonoid, AbelianGroup, Semiring, Ring,
               Unital, IntegralDomain, EuclideanDomain, Commutative)
 
+    TYPE(Polynomial<Coefficient: Monoid>)
+        ATTRIBUTE(degree: Int)
+        OPERATION(init([Coefficient]))
+        OPERATION(derivative(), Polynomial)
+        OPERATION(subscript(Int), Coefficient)
+        STATIC OPERATION(monomial(coefficient: Coefficient, degree: Int), Polynomial)
+    END
+
+    TYPE(Polynomial<Coefficient: Commutative>)
+        OPERATION(value(Coefficient), Coefficient)
+    END
+
+    TYPE(Polynomial<Coefficient: Field>)
+        OPERATION(monic(), Polynomial)
+    END
+
     GENERALIZATIONS
         "Polynomial<Coefficient: AbelianGroup>" -> {
             "Polynomial<Coefficient: Group>"
