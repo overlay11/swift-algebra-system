@@ -87,9 +87,9 @@ DIAGRAM
     END
 
     PACKAGE(Spaces)
-        PROTOCOL(VectorSpace<T: Field>)
-            ABSTRACT STATIC OPERATION(*(Self, T), Self)
-            ABSTRACT STATIC OPERATION(/(Self, T), Self)
+        PROTOCOL(VectorSpace<Scalar: Field>)
+            ABSTRACT STATIC OPERATION(*(Self, Scalar), Self)
+            ABSTRACT STATIC OPERATION(/(Self, Scalar), Self)
         END
 
         PROTOCOL(MetricSpace)
@@ -97,34 +97,38 @@ DIAGRAM
         END
 
         PROTOCOL(NormedSpace)
-            ABSTRACT ATTRIBUTE(norm: Double)
+            ATTRIBUTE(norm: Double)
             ABSTRACT ATTRIBUTE(squaredNorm: Double)
             STATIC OPERATION(metric(Self, Self), Double)
         END
 
-        PROTOCOL(NormedVectorSpace)
-        END
+        PROTOCOLS(NormedSpace<Double>, NormedSpace<Complex>)
 
         PROTOCOL(EuclideanSpace)
-            ABSTRACT STATIC OPERATION(**(Self, Self), Double)
-            ATTRIBUTE(norm: Double)
+            ABSTRACT STATIC OPERATION(&lt;*&gt;(Self, Self), Double)
+            ATTRIBUTE(squaredNorm: Double)
+        END
+
+        PROTOCOL(UnitarySpace)
+            ABSTRACT STATIC OPERATION(&lt;*&gt;(Self, Self), Complex)
             ATTRIBUTE(squaredNorm: Double)
         END
 
         GENERALIZATIONS
-            NormedSpace -> { MetricSpace AbelianGroup }
-            EuclideanSpace -> NormedVectorSpace -> { "VectorSpace<T: Field>" NormedSpace }
+            NormedSpace -> { MetricSpace "VectorSpace<Scalar: Field>" }
+            EuclideanSpace -> "NormedSpace<Double>" -> NormedSpace
+            UnitarySpace -> "NormedSpace<Complex>" -> NormedSpace
         END
     END
 
     GENERALIZATIONS
-        Semigroup -> Equatable
+        { Semigroup MetricSpace } -> Equatable
         Semiring -> CommutativeMonoid
         Ring -> AbelianGroup
-        "VectorSpace<T: Field>" -> AbelianGroup
+        "VectorSpace<Scalar: Field>" -> AbelianGroup
     END
 
     DEPENDENCIES
-        WEAK RELATION("VectorSpace<T: Field>" -> Field)
+        WEAK RELATION("VectorSpace<Scalar: Field>" -> Field)
     END
 END

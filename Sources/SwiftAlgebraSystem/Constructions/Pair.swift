@@ -1,6 +1,6 @@
 struct Pair<T: Monoid> {
-    private let re: T
-    private let im: T
+    let re: T
+    let im: T
 
     init(_ re: T, _ im: T = T.zero) {
         self.re = re
@@ -77,12 +77,13 @@ extension Pair: DivisionRing where T: DivisionRing & InvolutiveRing {
     }
 }
 
-extension Pair: MetricSpace, NormedSpace where T: NormedSpace {
-    var norm: Double {
-        return (im.squaredNorm + re.squaredNorm).squareRoot()
-    }
+extension Pair: MetricSpace, VectorSpace, NormedSpace where T: Field & NormedSpace {
+    typealias Scalar = T
     var squaredNorm: Double {
         return im.squaredNorm + re.squaredNorm
+    }
+    static func * (x: Pair, a: T) -> Pair {
+        return Pair(x.re * a, x.im * a)
     }
 }
 

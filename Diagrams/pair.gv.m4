@@ -23,12 +23,13 @@ DIAGRAM
     GENERALIZATIONS
         "Pair<T: AbelianGroup>" -> { "Pair<T: Group>" "Pair<T: CommutativeMonoid>" } -> "Pair<T: Monoid>"
         "Pair<T: TriviallyInvolutiveRing>" -> "Pair<T: InvolutiveRing>" -> "Pair<T: AbelianGroup>"
-        "Pair<T: NormedSpace>" -> "Pair<T: AbelianGroup>"
-        "Pair<Complex>" -> "Pair<T: DivisionRing & InvolutiveRing>" -> "Pair<T: InvolutiveRing & Unital>" -> "Pair<T: InvolutiveRing>"
+        "Pair<T: Field & NormedSpace>" -> "Pair<T: DivisionRing & InvolutiveRing>"
+        "Pair<T: DivisionRing & InvolutiveRing>" -> "Pair<T: InvolutiveRing & Unital>" -> "Pair<T: InvolutiveRing>"
         "Pair<Double>" -> "Pair<T: Field & TriviallyInvolutiveRing>" -> {
             "Pair<T: TriviallyInvolutiveRing>"
             "Pair<T: DivisionRing & InvolutiveRing>"
         }
+        { "Pair<Complex>" "Pair<Double>" } -> "Pair<T: Field & NormedSpace>"
     END
 
     BIDIRECTIONAL GENERALIZATIONS
@@ -50,6 +51,6 @@ DIAGRAM
         HORIZONTAL RELATION("Pair<T: DivisionRing & InvolutiveRing>" -> DivisionRing)
         HORIZONTAL RELATION("Pair<T: TriviallyInvolutiveRing>" -> Commutative)
         HORIZONTAL RELATION("Pair<T: Field & TriviallyInvolutiveRing>" -> Field)
-        HORIZONTAL RELATION("Pair<T: NormedSpace>" -> NormedSpace)
+        HORIZONTAL RELATION("Pair<T: Field & NormedSpace>" -> NormedSpace)
     END
 END
