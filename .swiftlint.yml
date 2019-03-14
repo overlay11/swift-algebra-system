@@ -1,5 +1,6 @@
 disabled_rules:
   - trailing_comma
+  - private_over_fileprivate
 
 opt_in_rules:
   - closure_end_indentation
